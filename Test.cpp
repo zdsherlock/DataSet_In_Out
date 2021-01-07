@@ -4,14 +4,9 @@
 #include "stdafx.h"
 #include "Test.h"
 #include "afxdialogex.h"
-//#include "PmReportSource\Common\PmReportCommon.h"
-//#include "..\PmBuildReportSouce\Source\Xml\Brick_column_JT.h"
-//#include "..\PmBuildReportSouce\Source\ReportMsgAnalyse.h"
-//#include "..\PmBuildReportSouce\Source\ReportRelationOpr.h"
+
 // CTest 对话框
-
 IMPLEMENT_DYNAMIC(CTest, CDialog)
-
 CTest::CTest(CWnd* pParent /*=NULL*/)
 	: CDialog(CTest::IDD, pParent)
 {
@@ -24,20 +19,19 @@ CTest::CTest(CWnd* pParent /*=NULL*/)
 	m_blPoleCount2 = 0.5;
 	m_blPoleCount3 = 1;
 
-	//初始化字符串
-	m_strComtypeBase = _T("'503','504','507','104','113','107','114','501','512','510','511','513','505','506','509','502'");
-	m_strComtypePole = _T("'201','202','203','204','205'");
-	m_strComtypeLiang;
-	m_strComtypeBan;
+	//初始comtype,comtype定义来自业务需求
+	m_strComtypeJichu = _T("'503','504','507','501','512','510','511','513','505','506','509','502'");
+	m_strComtypeZhu = _T("'201','202','203','204','205'");
+	m_strComtypeLiang = _T("'101','102','104,'105','106','107','109','111','112','113','114'");
+	m_strComtypeBan = _T("'401','402','404','405'");
 	m_strComtypeWall_JZ = _T("'304','305','306','307','309'");
-	m_strComtypeWall_JG;
-	m_strComtypeStair;
-	m_strComtypeDoor;
-	m_strComtypeWindow;
-	m_strComtypeDecorate;
-	m_strComtypeSatter;
-	m_strComtypeTufang;
-
+	m_strComtypeWall_JG = _T("'302','303','308','317'");
+	m_strComtypeStair = _T("'403','408'");
+	m_strComtypeDoor = _T("'601'");
+	m_strComtypeWindow = _T("'602'");
+	m_strComtypeDecorate = _T("'702','703','704','705','706','707','710','711','712','713'");
+	m_strComtypeLouti = _T("'801','802','803','804','805','807','808','811','813','814','815','816','817'");
+	m_strComtypeTufang = _T("'1301','1302','1303'");
 }
 
 CTest::~CTest()
@@ -66,222 +60,6 @@ BEGIN_MESSAGE_MAP(CTest, CDialog)
 END_MESSAGE_MAP()
 
 //封装的一些方法
-//获取混凝土标号
-//CString CTest::GetTqd(const int iComId,const CString & strHandle,const CString& strCalItemName /*= _T("")*/)
-//{
-//	/// 
-//	CString strTqd = _T("");		/// 砼强度
-//	int iFloorId = CSLComponentManager::Instance()->GetFloorId( iComId ) ;
-//
-//	/// 查找楼层
-//	if ( ! CPmReportMap::Instance()->FindFloor( iFloorId ) )
-//	{
-//		return strTqd;
-//	}
-//
-//	CString strComName = CSLComponentManager::Instance()->GetComName( iComId ) ;
-//	int iComType = CSLComponentManager::Instance()->GetComType( iComId ) ;
-//
-//	CString strVectorID = _T("") ; 
-//	PmPrivateParmOpr.GetComAttribute( iComId , strHandle , CComParmsSet_ParmName::GJ_ParmType , CComParmsSet_ParmName::VectorID_Gj , strVectorID ) ; 
-//	switch(iComType)
-//	{
-//		/// 梁	
-//	case Graphic_ComType::LIANG_KL:	/// case 101:
-//	case Graphic_ComType::LIANG_CL:	/// case 102:
-//	case Graphic_ComType::LIANG_QL:	///case 105:
-//	case Graphic_ComType::LIANG_GL:	///case 106:
-//	case Graphic_ComType::LIANG_LL:	/// 连梁
-//	case Graphic_ComType::LIANG_AL:	/// 过梁
-//		/// 柱
-//	case Graphic_ComType::ZHU_KZ:	/// case 201:
-//	case Graphic_ComType::ZHU_GZ:	///case 202:
-//	case Graphic_ComType::ZHU_AZ:	/// case 203:
-//	case Graphic_ComType::ZHU_ZM:    /// 柱帽
-//		/// 墙
-//	case Graphic_ComType::QIANG_TWQ:	/// case 302:
-//	case Graphic_ComType::QIANG_TNQ:	/// case 303:
-//	case Graphic_ComType::QIANG_DTQ:	/// case 308:
-//	case Graphic_ComType::QIANG_JIAYE_QB:
-//	case  Graphic_ComType::QIANG_JIAYE_QQ:
-//		/// 板
-//	case Graphic_ComType::BAN_XB:	/// case 401:
-//	case Graphic_ComType::BAN_YB:	///case 402:
-//	case Graphic_ComType::BAN_LTB:	///case 403:
-//	case Graphic_ComType::BAN_GB:	///case 404:
-//	case Graphic_ComType::BAN_QB:	///case 405:
-//	case Graphic_ComType::BAN_LXB:	/// 螺旋板
-//	case Graphic_ComType::BAN_TB:
-//	case Graphic_ComType::BAN_WJX:  /// 屋脊线
-//	case Graphic_ComType::BAN_JIAYE: /// 梁板加腋
-//
-//
-//	case Graphic_ComType::LX_YT:		///case 801:
-//	case Graphic_ComType::LX_YP:		///case 802:
-//	case Graphic_ComType::LX_SSLX:	///case 804:
-//	case Graphic_ComType::LX_YG:		///case 805:
-//	case Graphic_ComType::LX_TJ:		/// case 806:
-//	case Graphic_ComType::LX_PD:		///case 807:
-//	case Graphic_ComType::LX_PSG:	/// case 808:
-//	case Graphic_ComType::LX_YaDing:
-//	case Graphic_ComType::LX_LanBan:
-//	case Graphic_ComType::LX_YTYPZS:
-//	case Graphic_ComType::LX_STPD:
-//	case Graphic_ComType::LX_STTJ:
-//
-//		/// 门窗
-//	case Graphic_ComType::MC_PC:		/// 飘窗
-//	case Graphic_ComType::MC_LHC:	 /// 老虎窗
-//	case Graphic_ComType::MC_ZPC:	/// 转角飘窗
-//	case Graphic_ComType::MC_CTB:	/// 窗台
-//	case Graphic_ComType::MC_MD:
-//	case Graphic_ComType::MC_MCT:   /// 门窗套
-//
-//		/// 
-//	case Graphic_ComType::ZHU_ZZ:	///case 204:
-//	case Graphic_ComType::QIANG_ZWQ:	///case 304:
-//	case Graphic_ComType::QIANG_ZNQ:	/// case 305:
-//	case Graphic_ComType::QIANG_TCQ:	/// case 306:	
-//
-//	case Graphic_ComType::QIANG_JBQ: ///间壁墙
-//	case Graphic_ComType::QIANG_RFQ:
-//
-//	case Graphic_ComType::LX_JD: ///  外墙节点
-//		{	
-//			PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("TQD") , strTqd ) ; 
-//			break;
-//		}
-//	case Graphic_ComType::LIANG_JCL:	///case 104:
-//	case Graphic_ComType::LIANG_DKL: /// 地框梁
-//	case Graphic_ComType::LIANG_JCLL: /// 基础连梁
-//	case Graphic_ComType::LIANG_JCLJY:///基础梁加腋
-//		{
-//			if (_T("垫层") == strCalItemName ||
-//				_T("垫层模板") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("TQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//		/// 零星
-//	case Graphic_ComType::LX_HJD:
-//		{	
-//			// QC:27413 需求说如果计算项目为"垫层",则垫层砼强度取固定值:C15
-//			if (_T("垫层") == strCalItemName)
-//			{
-//				strTqd = _T("C15");
-//			} 
-//			else
-//			{
-//				strTqd = GetHjdTqd(strCalItemName,iFloorId,strHandle);
-//			}
-//			break;
-//		}
-//		/// 基础部分
-//	case Graphic_ComType::JICHU_RGZJ:/// case 505:
-//	case Graphic_ComType::JICHU_QTZJ:/// case 506:
-//	case Graphic_ComType::JICHU_GZZJ:
-//		{	
-//			PmPrivateParmOpr.GetComAttribute( iComId , strHandle ,  _T("JCTQD") , strTqd ) ; 
-//			break;
-//		}
-//	case Graphic_ComType::JICHU_TTJ:	/// case 501:
-//	case Graphic_ComType::JICHU_DLJ:	/// case 503:
-//	case Graphic_ComType::JICHU_MTJ:	/// case 507:
-//	case Graphic_ComType::JICHU_BZCT: /// 标准承台
-//		{
-//
-//			if (_T("垫层") == strCalItemName ||
-//				_T("垫层模板") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("JCTQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//	case Graphic_ComType::JICHU_ZSJ:	/// case 502:
-//		{
-//
-//			if (_T("垫层") == strCalItemName ||
-//				_T("垫层模板") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("TQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//	case Graphic_ComType::JICHU_CT:		/// case 504:
-//		{
-//
-//			if (_T("底部垫层") == strCalItemName ||
-//				_T("侧面垫层") == strCalItemName ||
-//				_T("垫层模板") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("JCTQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//	case Graphic_ComType::JICHU_ZD:		/// case 504:
-//		{
-//
-//			if (_T("底部垫层") == strCalItemName ||
-//				_T("侧面垫层") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("JCTQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//	case Graphic_ComType::JICHU_JSJ:  /// 集水井
-//		{
-//
-//			if (_T("垫层") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("JCTQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//	case Graphic_ComType::JICHU_STJSJ:/// 实体集水井
-//		{
-//
-//			if (_T("底部垫层") == strCalItemName ||
-//				_T("侧面垫层") == strCalItemName ||
-//				_T("底部垫层模板") == strCalItemName)
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("DCTQD") , strTqd ) ; 
-//			} 
-//			else
-//			{
-//				PmPrivateParmOpr.GetComAttribute( iComId , strHandle , _T("JCTQD") , strTqd ) ; 
-//			}
-//			break;
-//		}
-//	default:
-//		break;
-//	}
-//	return strTqd;
-//}
 
 //目标工程路径获取
 void CTest::OnBnClickedButtonOpenTar()
@@ -602,7 +380,7 @@ double CTest::GetPoleCountBl(const CString& filePathSrc, const CString& filePath
 							   LEFT OUTER JOIN components AS C\
 									ON R.comid=C.id\
 						   WHERE C.comtype in (%s)\
-						   GROUP BY R.comid,R.cadhandle)"), m_strComtypePole, m_strComtypePole);
+						   GROUP BY R.comid,R.cadhandle)"), m_strComtypeZhu, m_strComtypeZhu);
 
 	stmtSrc.Prepare(strSql);
 	stmtTar.Prepare(strSql);
@@ -650,12 +428,12 @@ double CTest::GetPoleCountBl(const CString& filePathSrc, const CString& filePath
 
 	return dPoleCountScore;
 };
-///////////////////////////////////////////////计分函数/////////////////////////////////////////
+
 CString CTest::CalcBaseScroe()
 {
 	//初始化参数
 	//基础类型的comtype集
-	CString strComtype = m_strComtypeBase;
+	CString strComtype = m_strComtypeJichu;
 
 	//计算类型部分得分比例
 	double dTypeScoreBl = CalcTypeScore(strComtype);
@@ -683,7 +461,7 @@ CString CTest::CalcBaseScroe()
 CString CTest::CalcPoleScore()
 {
 	//初始化参数
-	CString strComtype = m_strComtypePole;//基础类型的comtype集
+	CString strComtype = m_strComtypeZhu;//基础类型的comtype集
 
 	//计算类型得分比例
 	double dblTypeScoreBl = CalcTypeScore(strComtype);
@@ -725,7 +503,7 @@ CString CTest::CalcWallScore_JZ()
 
 };
 
-//////////////////////////////////////////////////数据计算函数//////////////////////////////////////
+
 double CTest::CalcTypeScore(const CString& strComtypes)
 {
 	int nNumSame = 0;
@@ -837,18 +615,18 @@ double CTest::CalcGclScore_QH()
 					  FROM components AS C\
 		              WHERE C.comtype in (%s)"),m_strComtypeWall_JZ);
 	stmtSrc.Prepare(strSql);
-	int rcSrc = stmtSrc.Step();
+	int rc = stmtSrc.Step();
 	
 	int iComid = 0;
 	CString strQH;
 	
-	while (SQLITE_ROW == rcSrc)
+	while (SQLITE_ROW == rc)
 	{
 		stmtSrc.Column_Int(_T("id"), iComid);
 		
 		CComponentsContainer::GetComAttribute( iComid , CComParmsSet_ParmName::SL_ParmType , _T("墙厚") , strQH ) ;
 		int iQH = _ttoi(strQH);
-		rcSrc = stmtSrc.Step();
+		rc = stmtSrc.Step();
 	}
 	double a = 1.0;
 
@@ -857,8 +635,972 @@ double CTest::CalcGclScore_QH()
 	return a;
 }
 
+void CTest::SetData_JiChu(const CString& filePathNew, const CString& filePathOld)
+{
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
 
-// CTest 消息处理程序
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS jichu");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew = (_T("CREATE TABLE jichu(id INTEGER,\
+												comid INTEGER,\
+												comtype INTEGER,\
+												calitemname TEXT,\
+												unit TEXT,\
+												mainmode INTEGER,\
+												vectorparms BLOB,\
+												tqd TEXT,\
+												gcl REAL,\
+												PRIMARY KEY (id))"));
+	int rc = stmtNew.Exec(strSqlNew);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld;
+	strSqlOld.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,R.calitemname,R.unit,R.mainmode,C.vectorparms,R.quantity\
+						FROM result AS R\
+							LEFT OUTER JOIN components AS C\
+								ON R.comid = C.id\
+						WHERE C.comtype in (%s)"), m_strComtypeJichu);
+
+	stmtOld.Prepare(strSqlOld);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	double dQuantity = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSQLNew_Insert = _T("INSERT INTO jichu(comid,comtype,calitemname,unit,mainmode,vectorparms,tqd,gcl)\
+											VALUES (:comid,:comtype,:calitemname,:unit,:mainmode,:vectorparms,:tqd,:gcl)");
+
+	stmtNew.Prepare(strSQLNew_Insert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitemname);
+		stmtNew.Bind_Text(_T(":calitemname"),strCalitemname);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"),strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), imainmode);
+		stmtNew.Bind_Int(_T(":mainmode"),imainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_Zhu(const CString& filePathNew, const CString& filePathOld)
+{
+	CString strPathNew = filePathNew;
+	CSqliteDataBase dbNew(strPathNew);
+
+	//创建新数据库表单-基础部分
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS zhu");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的工程量和钢筋表单
+	CString strSqlNew = (_T("CREATE TABLE zhu(id INTEGER,\
+												   comid INTEGER,\
+												   comtype INTEGER,\
+												   cadhandle TEXT,\
+												   calitemname TEXT,\
+												   unit TEXT,\
+												   mainmode INTEGER,\
+												   vectorparms BLOB,\
+												   tqd TEXT,\
+												   gcl REAL,\
+												   PRIMARY KEY (id))"));
+	stmtNew.Exec(strSqlNew);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	CString strSQLOld;
+	strSQLOld.Format(_T("SELECT *\
+						 FROM result AS R\
+							  LEFT OUTER JOIN components AS C\
+							       on R.comid = C.id\
+						 WHERE C.comtype in (%s)"), m_strComtypeZhu);
+
+	stmtOld.Prepare(strSQLOld);
+	int rc = stmtOld.Step();
+
+	if (SQLITE_ROW != rc)
+	{
+		AfxMessageBox(stmtOld.ErrMsg());
+	}
+
+	int iComid = 0;
+	int iComtype = 0;
+	CString strHandle;
+	CString strCalitem;
+	CString strUnit;
+	int iMainmode = 0;
+	const void *pBuffer = NULL;
+	long lBufferSize = 0;
+	CString strTqd;
+	double dQuantity = 0.0;
+
+	CString strSQLNew_Insert = _T("INSERT INTO zhu(comid,comtype,cadhandle,calitemname,unit,mainmode,vectorparms,tqd,gcl)\
+										VALUES (:comid,:comtype,:cadhandle,:calitemname,:unit,:mainmode,:vectorparms,:tqd,:gcl)");
+	stmtNew.Prepare(strSQLNew_Insert);
+	while (SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"), iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"), iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitem);
+		stmtNew.Bind_Text(_T(":calitemname"), strCalitem);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"), strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), iMainmode);
+		stmtNew.Bind_Int(_T(":mainmode"), iMainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer, lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"), pBuffer, lBufferSize);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		rc = stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_Ban(const CString& filePathNew, const CString& filePathOld)
+{
+	CString strPathNew = filePathNew;
+	CSqliteDataBase dbNew(strPathNew);
+
+	//创建新数据库表单-基础部分
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS ban");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的工程量和钢筋表单
+	CString strSqlNew = (_T("CREATE TABLE ban(id INTEGER,\
+							comid INTEGER,\
+							comtype INTEGER,\
+							width TEXT,\
+							cadhandle TEXT,\
+							calitemname TEXT,\
+							unit TEXT,\
+							mainmode INTEGER,\
+							tqd TEXT,\
+							gcl REAL,\
+							PRIMARY KEY (id))"));
+	stmtNew.Exec(strSqlNew);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	CString strSQLOld;
+	strSQLOld.Format(_T("SELECT *\
+						FROM result AS R\
+						LEFT OUTER JOIN components AS C\
+						on R.comid = C.id\
+						WHERE C.comtype in (%s)"), m_strComtypeBan);
+
+	stmtOld.Prepare(strSQLOld);
+	int rc = stmtOld.Step();
+
+	if (SQLITE_ROW != rc)
+	{
+		AfxMessageBox(stmtOld.ErrMsg());
+	}
+
+	int iComid = 0;
+	int iComtype = 0;
+	CString strHandle;
+	CString strCalitem;
+	CString strUnit;
+	int iMainmode = 0;
+	const void *pBuffer = NULL;
+	long lBufferSize = 0;
+	CString strTqd;
+	double dQuantity = 0.0;
+	CString strWidth;
+	CString strSQLNew_Insert = _T("INSERT INTO ban(comid,comtype,width,cadhandle,calitemname,unit,mainmode,tqd,gcl)\
+										  VALUES (:comid,:comtype,:width,:cadhandle,:calitemname,:unit,:mainmode,:tqd,:gcl)");
+	stmtNew.Prepare(strSQLNew_Insert);
+	while (SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"), iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"), iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitem);
+		stmtNew.Bind_Text(_T(":calitemname"), strCalitem);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"), strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), iMainmode);
+		stmtNew.Bind_Int(_T(":mainmode"), iMainmode);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		CComponentsContainer::GetComAttribute( iComid , CComParmsSet_ParmName::SL_ParmType , _T("Width") , strWidth ) ;
+		stmtNew.Bind_Text(_T(":width"), strWidth);
+
+		rc = stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_Liang(const CString& filePathNew, const CString& filePathOld)
+{
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS liang");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew_GCL = (_T("CREATE TABLE liang(id INTEGER,\
+													comid INTEGER,\
+													comtype INTEGER,\
+													calitemname TEXT,\
+													unit TEXT,\
+													mainmode INTEGER,\
+													vectorparms BLOB,\
+													tqd TEXT,\
+													gcl REAL,\
+													PRIMARY KEY (id))"));
+
+	int rc = stmtNew.Exec(strSqlNew_GCL);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld_gcl;
+	strSqlOld_gcl.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,R.calitemname,R.unit,R.mainmode,C.vectorparms,R.quantity\
+							 FROM result AS R\
+								 LEFT OUTER JOIN components AS C\
+									ON R.comid = C.id\
+							 WHERE C.comtype in (%s)"), m_strComtypeJichu);
+
+	stmtOld.Prepare(strSqlOld_gcl);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	double dQuantity = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSqlInsert = _T("INSERT INTO liang(comid,comtype,calitemname,unit,mainmode,vectorparms,tqd,gcl)\
+									  VALUES (:comid,:comtype,:calitemname,:unit,:mainmode,:vectorparms,:tqd,:gcl)");
+
+	stmtNew.Prepare(strSqlInsert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitemname);
+		stmtNew.Bind_Text(_T(":calitemname"),strCalitemname);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"),strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), imainmode);
+		stmtNew.Bind_Int(_T(":mainmode"),imainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_Wall_JZ(const CString& filePathNew, const CString& filePathOld)
+{
+
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS wall_jz");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew_GCL = (_T("CREATE TABLE wall_jz(id INTEGER,\
+													  comid INTEGER,\
+													  comtype INTEGER,\
+													  width TEXT,\
+												      calitemname TEXT,\
+													  unit TEXT,\
+													  mainmode INTEGER,\
+													  tqd TEXT,\
+													  gcl REAL,\
+													  PRIMARY KEY (id))"));
+
+	int rc = stmtNew.Exec(strSqlNew_GCL);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld_gcl;
+	strSqlOld_gcl.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,R.calitemname,R.unit,R.mainmode,C.vectorparms,R.quantity\
+							 FROM result AS R\
+							 LEFT OUTER JOIN components AS C\
+							 ON R.comid = C.id\
+							 WHERE C.comtype in (%s)"), m_strComtypeWall_JZ);
+
+	stmtOld.Prepare(strSqlOld_gcl);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	CString strWidth;
+	double dQuantity = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSqlInsert = _T("INSERT INTO wall_jz(comid,comtype,width,calitemname,unit,mainmode,tqd,gcl)\
+									  VALUES (:comid,:comtype,:width,:calitemname,:unit,:mainmode,:tqd,:gcl)");
+
+	stmtNew.Prepare(strSqlInsert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitemname);
+		stmtNew.Bind_Text(_T(":calitemname"),strCalitemname);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"),strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), imainmode);
+		stmtNew.Bind_Int(_T(":mainmode"),imainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		CComponentsContainer::GetComAttribute( iComid , CComParmsSet_ParmName::SL_ParmType , _T("Width") , strWidth ) ;
+		stmtNew.Bind_Text(_T(":width"), strWidth);
+
+		rc = stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_Wall_JG(const CString& filePathNew, const CString& filePathOld)
+{
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS wall_jg");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew_GCL = (_T("CREATE TABLE wall_jg(id INTEGER,\
+												      comid INTEGER,\
+													  comtype INTEGER,\
+													  calitemname TEXT,\
+													  unit TEXT,\
+													  mainmode INTEGER,\
+													  vectorparms BLOB,\
+													  tqd TEXT,\
+													  gcl REAL,\
+													  PRIMARY KEY (id))"));
+
+	int rc = stmtNew.Exec(strSqlNew_GCL);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld_gcl;
+	strSqlOld_gcl.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,R.calitemname,R.unit,R.mainmode,C.vectorparms,R.quantity\
+							 FROM result AS R\
+							 LEFT OUTER JOIN components AS C\
+							 ON R.comid = C.id\
+							 WHERE C.comtype in (%s)"), m_strComtypeWall_JG);
+
+	stmtOld.Prepare(strSqlOld_gcl);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	double dQuantity = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSqlInsert = _T("INSERT INTO wall_jg(comid,comtype,calitemname,unit,mainmode,vectorparms,tqd,gcl)\
+							          VALUES (:comid,:comtype,:calitemname,:unit,:mainmode,:vectorparms,:tqd,:gcl)");
+
+	stmtNew.Prepare(strSqlInsert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitemname);
+		stmtNew.Bind_Text(_T(":calitemname"),strCalitemname);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"),strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), imainmode);
+		stmtNew.Bind_Int(_T(":mainmode"),imainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_Louti(const CString& filePathNew, const CString& filePathOld)
+{
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS louti");
+
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew_GCL = (_T("CREATE TABLE louti(id INTEGER,\
+													comid INTEGER,\
+													comtype INTEGER,\
+													calitemname TEXT,\
+													unit TEXT,\
+													mainmode INTEGER,\
+													vectorparms BLOB,\
+													tqd TEXT,\
+													gcl REAL,\
+													PRIMARY KEY (id))"));
+
+	int rc = stmtNew.Exec(strSqlNew_GCL);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld_gcl;
+	strSqlOld_gcl.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,R.calitemname,R.unit,R.mainmode,C.vectorparms,R.transformula\
+							 FROM result AS R\
+							 LEFT OUTER JOIN components AS C\
+							 ON R.comid = C.id\
+							 WHERE C.comtype in (%s)"), m_strComtypeStair);
+
+	stmtOld.Prepare(strSqlOld_gcl);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	double dtransformula = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSqlInsert = _T("INSERT INTO louti(comid,comtype,calitemname,unit,mainmode,vectorparms,tqd,gcl)\
+									  VALUES (:comid,:comtype,:calitemname,:unit,:mainmode,:vectorparms,:tqd,:gcl)");
+
+	stmtNew.Prepare(strSqlInsert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitemname);
+		stmtNew.Bind_Text(_T(":calitemname"),strCalitemname);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"),strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), imainmode);
+		stmtNew.Bind_Int(_T(":mainmode"),imainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtOld.Column_Double(_T("transformula"), dtransformula);
+		stmtNew.Bind_Double(_T(":gcl"), dtransformula);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_MenChuang(const CString& filePathNew, const CString& filePathOld)
+{
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS menchuang");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew = (_T("CREATE TABLE menchuang(id INTEGER,\
+													comid INTEGER,\
+													comtype INTEGER,\
+													cadhandle TEXT,\
+													vectorparms BLOB,\
+													PRIMARY KEY (id))"));
+	int rc = stmtNew.Exec(strSqlNew);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld;
+	strSqlOld.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,C.vectorparms\
+						 FROM result AS R\
+							 LEFT OUTER JOIN components AS C\
+								ON R.comid = C.id\
+						 WHERE C.comtype in (%s)\
+						 OR  C.comtype in (%s)"), m_strComtypeDoor,m_strComtypeWindow);
+
+	stmtOld.Prepare(strSqlOld);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	double dQuantity = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSQLNew_Insert = _T("INSERT INTO menchuang(comid,comtype,cadhandle,vectorparms)\
+									      VALUES (:comid,:comtype,:cadhandle,:vectorparms)");
+
+	stmtNew.Prepare(strSQLNew_Insert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+void CTest::SetData_Other(const CString& filePathNew, const CString& filePathOld)
+{
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	stmtNew.Begin();
+
+	//清空数据表
+	CString strSQL_DEL = _T("DROP TABLE IF EXISTS other");
+	stmtNew.Exec(strSQL_DEL);
+
+	//创建新的表单
+	CString strSqlNew_GCL = (_T("CREATE TABLE other(id INTEGER,\
+														 comid INTEGER,\
+														 comtype INTEGER,\
+														 calitemname TEXT,\
+														 unit TEXT,\
+														 mainmode INTEGER,\
+														 vectorparms BLOB,\
+														 tqd TEXT,\
+														 gcl REAL,\
+														 PRIMARY KEY (id))"));
+
+	int rc = stmtNew.Exec(strSqlNew_GCL);
+
+	//打开工程project数据库进行数据获取
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+
+	//获取result表单数据
+	CString strSqlOld_gcl;
+	strSqlOld_gcl.Format(_T("SELECT R.comid,C.comtype,R.cadhandle,R.calitemname,R.unit,R.mainmode,C.vectorparms,R.quantity\
+							 FROM result AS R\
+								 LEFT OUTER JOIN components AS C\
+									ON R.comid = C.id\
+							 WHERE C.comtype IN (%s) OR\
+								   C.comtype IN (%s) OR\
+								   C.comtype IN (%s)"), m_strComtypeDecorate, m_strComtypeLouti, m_strComtypeTufang);
+
+	stmtOld.Prepare(strSqlOld_gcl);
+	rc = stmtOld.Step();
+
+	int iComtype = 0;
+	int iComid = 0;
+	int imainmode = 0;
+	long lBufferSize = 0;
+	const void* pBuffer = NULL;
+	CString strMainmode;
+	CString strHandle;
+	CString strCalitemname;
+	CString strUnit;
+	double dQuantity = 0.0;
+	//从工程数据库获取数据并存入新建数据库
+	CString strSqlInsert = _T("INSERT INTO other(comid,comtype,calitemname,unit,mainmode,vectorparms,tqd,gcl)\
+										 VALUES (:comid,:comtype,:calitemname,:unit,:mainmode,:vectorparms,:tqd,:gcl)");
+
+	stmtNew.Prepare(strSqlInsert);
+
+	while(SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"),iComid);
+
+		stmtOld.Column_Int(_T("comtype"), iComtype);
+		stmtNew.Bind_Int(_T(":comtype"),iComtype);
+
+		stmtOld.Column_Text(_T("cadhandle"), strHandle);
+		stmtNew.Bind_Text(_T(":cadhandle"), strHandle);
+
+		stmtOld.Column_Text(_T("calitemname"), strCalitemname);
+		stmtNew.Bind_Text(_T(":calitemname"),strCalitemname);
+
+		stmtOld.Column_Text(_T("unit"), strUnit);
+		stmtNew.Bind_Text(_T(":unit"),strUnit);
+
+		stmtOld.Column_Int(_T("mainmode"), imainmode);
+		stmtNew.Bind_Int(_T(":mainmode"),imainmode);
+
+		stmtOld.Column_Blob(_T("vectorparms"), pBuffer,lBufferSize);
+		stmtNew.Bind_Blob(_T(":vectorparms"),pBuffer,lBufferSize);
+
+		stmtOld.Column_Double(_T("quantity"), dQuantity);
+		stmtNew.Bind_Double(_T(":gcl"), dQuantity);
+
+		CString strTqd = CUICommonCallBack::CallGetTqd(iComid, strHandle);
+		stmtNew.Bind_Text(_T(":tqd"), strTqd);
+
+		stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+	stmtNew.Commit();
+}
+
+void CTest::SetData_GJ(const CString& filePathNew, const CString& filePathOld, const GJLX eGjlx)
+{
+	CString strComtypes;
+	CSqliteDataBase dbNew(filePathNew);
+	CSqliteDBStmt stmtNew(&dbNew);
+	CSqliteDataBase dbOld(filePathOld);
+	CSqliteDBStmt stmtOld(&dbOld);
+	stmtNew.Begin();
+
+	//根据comtype进行分表
+	CString strTableName;
+	switch (eGjlx)
+	{
+		case eJiChu:
+			{
+				strTableName = _T("jichu_gj");
+				strComtypes = m_strComtypeJichu;
+				break;
+			}
+		case eZhu:
+			{
+				strTableName = _T("zhu_gj");
+				strComtypes = m_strComtypeZhu;
+				break;
+			}
+		case eLiang:
+			{
+				strTableName = _T("liang_gj");
+				strComtypes = m_strComtypeLiang;
+				break;
+			}
+		case eBan:
+			{
+				strTableName = _T("ban_gj");
+				strComtypes = m_strComtypeBan;
+				break;
+			}
+		case eWall_JZ:
+			{
+				strTableName = _T("wall_jz_gj");
+				strComtypes = m_strComtypeWall_JZ;
+				break;
+			}
+		case eLouti:
+			{
+				strTableName = _T("louti_gj");
+				strComtypes = m_strComtypeLouti;
+				break;
+			}
+		default:
+			break;
+	}
+
+	CString strSQL_Del;
+	strSQL_Del.Format(_T("DROP TABLE IF EXISTS %s"), strTableName);
+	stmtNew.Exec(strSQL_Del);
+	//从原表格获取数据存入到新表格中
+	CString strSQLNew;
+	strSQLNew.Format(_T("CREATE TABLE %s(id INTEGER,\
+										 comid INTEGER,\
+										 comtype INTEGER,\
+										 gjjb TEXT,\
+										 zj REAL,\
+										 zz_gj REAL,\
+										 PRIMARY KEY (id))"), strTableName);
+	stmtNew.Exec(strSQLNew);
+
+	CString strSQLOld;
+	strSQLOld.Format(_T("SELECT G.comid,C.comtype,G.gjjb,G.zj,G.zz*G.cc_count AS zz_gj\
+						 FROM graphicsresultv2 AS G\
+							  LEFT OUTER JOIN components AS C\
+								   ON G.comid = C.id\
+						 WHERE C.comtype in (%s)"), strComtypes);
+	stmtOld.Prepare(strSQLOld);
+	int rc = stmtOld.Step();
+
+	CString strSQLNew_Insert;
+	strSQLNew_Insert.Format(_T("INSERT INTO %s(comid,comtype,gjjb,zj,zz_gj)\
+										VALUES (:comid,:comtype,:gjjb,:zj,:zz_gj)"), strTableName);
+
+	stmtNew.Prepare(strSQLNew_Insert);
+	int iComid = 0;
+	int icomtype = 0;
+	CString strGjjb;
+	double dzj = 0.0;
+	double dzz = 0.0;
+	while (SQLITE_ROW == rc)
+	{
+		stmtOld.Column_Int(_T("comid"), iComid);
+		stmtNew.Bind_Int(_T(":comid"), iComid);
+
+		stmtOld.Column_Int(_T("comtype"), icomtype);
+		stmtNew.Bind_Int(_T(":comtype"), icomtype);
+
+		stmtOld.Column_Text(_T("gjjb"), strGjjb);
+		stmtNew.Bind_Text(_T(":gjjb"), strGjjb);
+
+		stmtOld.Column_Double(_T("zj"), dzj);
+		stmtNew.Bind_Double(_T(":zj"), dzj);
+
+		stmtOld.Column_Double(_T("zz_gj"), dzz);
+		stmtNew.Bind_Double(_T(":zz_gj"), dzz);
+
+		rc = stmtNew.Step();
+		stmtNew.Reset();
+
+		rc = stmtOld.Step();
+	}
+
+	stmtNew.Commit();
+}
+
+BOOL CTest::GetQDMode(const CString& filePath)
+{
+	CSqliteDataBase db(filePath);
+	CSqliteDBStmt stmt(&db);
+
+	CString strSQLOld_Emode = _T("SELECT P.parmvalue\
+								 FROM projectinfo AS P\
+								 WHERE P.parmname = 'QDMode'");
+	stmt.Prepare(strSQLOld_Emode);
+	int rc = stmt.Step();
+	CString strEmode;		//暂时不确定用法，先取出来0是定额模式，1是清单模式
+	if (SQLITE_ROW == rc)
+	{
+		stmt.Column_Text(_T("parmvalue"), strEmode);
+	}
+
+	BOOL bEmode = TRUE;
+
+	if (1 == strEmode)
+	{
+		bEmode = TRUE;
+	}
+	else
+	{
+		bEmode = FALSE;
+	}
+	return bEmode;
+}
+
 void CTest::OnBnClickedButtonBase()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -1053,59 +1795,25 @@ CProject_VectorParmsTable* CTest::LoadDataSetVector(CSqliteDBStmt& db, const CSt
 void CTest::OnBnClickedButtonTest()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	//CString strTqd;
-	//CString strhandle = _T("1F20");
-	//int icomid = 115;
-	//strTqd = GetTqd(icomid, strhandle);
-	//int iRow = 0;
-	//CProject_SWLExtraValueTable* m_pDataSetTest = PMNew(CProject_SWLExtraValueTable);
-	//m_pDataSetTest->InitFieldStr();
-	//m_pDataSetTest->InsertRow(0);
+	CString strPathSrc = _T("E:\\ScoreSystem\\srcdatabase.db");
+	CString strPathTar = _T("E:\\ScoreSystem\\tardatabase.db");
 
-	//CSqliteDataBase dbTar(m_fileTarPath);
-	//CSqliteDBStmt stmtTar(&dbTar);
+	//SetData_JiChu(strPathSrc, m_fileSrcPath);
+	//SetData_JiChu(strPathTar, m_fileTarPath);
+	SetData_Zhu(strPathSrc, m_fileSrcPath);
+	SetData_Zhu(strPathTar, m_fileTarPath);
+	SetData_Liang(strPathSrc, m_fileSrcPath);
+	SetData_Ban(strPathSrc, m_fileSrcPath);
+	SetData_Wall_JZ(strPathSrc, m_fileSrcPath);
+	SetData_Wall_JG(strPathSrc, m_fileSrcPath);
+	SetData_Louti(strPathSrc, m_fileSrcPath);
+	SetData_Other(strPathSrc, m_fileSrcPath);
+	SetData_MenChuang(strPathSrc, m_fileSrcPath);
 
-	//CSqliteDataBase dbCur(m_fileSrcPath);
-	//CSqliteDBStmt stmtCur(&dbCur);
-
-	//CString strSqlComtype = _T("SELECT * FROM components WHERE comtype = 104");
-
-	//stmtTar.Prepare(strSqlComtype);
-	//int rc = stmtTar.Step();
-
-	//while (SQLITE_ROW == rc)
-	//{
-	//	CString strComnameTar;
-	//	int iFlooridTar = 0;
-	//	//参数初始化
-	//	const void* pBuffer = NULL;
-	//	long lBufferSize = 0;
-
-	//	stmtTar.Column_Text(_T("comname"), strComnameTar);
-	//	stmtTar.Column_Int(_T("floorid"), iFlooridTar);
-	//	stmtTar.Column_Blob(_T("vectorparms"), pBuffer, lBufferSize);
-
-
-	//	CProject_VectorParmsTable* pVectorDataSetTar = NULL;
-
-	//	pVectorDataSetTar = PMNew(CProject_VectorParmsTable);
-	//	pVectorDataSetTar->InitFieldStr();
-	//	pVectorDataSetTar->Buffer2DataSet(const_cast<void*>(pBuffer),lBufferSize);
-
-	//	UIFunction::TraceDataSet_HTML(pVectorDataSetTar,_T("d:\\zdtest20201224Cur.html"));//zdtest输出测试
-
-	//	rc = stmtTar.Step();
-
-	//	UIFunction::TraceDataSet_HTML(m_pDataSetTest,_T("d:\\zdtest20201224.html"));//zdtest输出测试
-	//	m_pDataSetTest->SetAsString(_T("comname"), iRow, strComnameTar);
-	//	UIFunction::TraceDataSet_HTML(m_pDataSetTest,_T("d:\\zdtest20201224.html"));//zdtest输出测试
-	//	m_pDataSetTest->SetAsInteger(_T("floorid"), iRow, iFlooridTar);
-	//	UIFunction::TraceDataSet_HTML(m_pDataSetTest,_T("d:\\zdtest20201224.html"));//zdtest输出测试
-	//	iRow ++;
-	//}
-	//PMDelete(m_pDataSetTest);
-	//m_pDataSetTest = NULL;
-
+	SetData_GJ(strPathSrc, m_fileSrcPath, eJiChu);
+	SetData_GJ(strPathTar, m_fileTarPath, eJiChu);
+	SetData_GJ(strPathSrc, m_fileSrcPath, eZhu);
+	SetData_GJ(strPathTar, m_fileTarPath, eZhu);
 }
 
 void CTest::OnBnClickedButtonWallJz()
@@ -1113,10 +1821,4 @@ void CTest::OnBnClickedButtonWallJz()
 	// TODO: 在此添加控件通知处理程序代码
 	CString score = CalcWallScore_JZ();
 	m_Edit_Show_Data.SetWindowTextW(score);
-}
-
-
-void CTest::CalcTest()
-{
-
 }
